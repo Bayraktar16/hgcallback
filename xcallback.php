@@ -1,13 +1,31 @@
 <?php
-// Twitter OAuth2 Callback
+// ------------------------------
+// Twitter OAuth2 Callback Logger
+// Hazırlayan: BAYRAKTAR16
+// ------------------------------
+
+header('Content-Type: text/plain; charset=utf-8');
+
+// ?code gelmemişse uyarı ver
 if (!isset($_GET['code'])) {
-    echo "Callback çalıştı fakat 'code' gelmedi.";
+    echo "Callback çalıştı fakat 'code' parametresi gelmedi.\n";
     exit;
 }
 
 $code = $_GET['code'];
+$time = date("Y-m-d H:i:s");
 
-file_put_contents("last_code.txt", date("Y-m-d H:i:s") . " => CODE: " . $code . "\n", FILE_APPEND);
+// Kayıt dosyası
+$logFile = "last_code.txt";
 
-echo "Twitter bağlantısı başarılı! CODE: " . htmlspecialchars($code);
+// Kayıt satırı
+$logEntry = "[$time] CODE: $code\n";
+
+// Dosyaya yaz
+file_put_contents($logFile, $logEntry, FILE_APPEND);
+
+// Ekrana sonuç göster
+echo "Twitter bağlantısı başarılı!\n";
+echo "CODE: $code\n\n";
+echo "Log dosyasına kaydedildi: $logFile";
 ?>
